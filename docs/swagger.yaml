@@ -10,6 +10,34 @@ definitions:
     - Correo_electronico
     - password
     type: object
+  types.UsuariosModel:
+    properties:
+      Correo_electronico:
+        type: string
+      apellidos:
+        type: string
+      celular:
+        type: string
+      codigo_pais:
+        type: string
+      fecha_nacimiento:
+        type: string
+      genero:
+        type: string
+      nacionalidad:
+        type: string
+      nombre:
+        type: string
+    required:
+    - Correo_electronico
+    - apellidos
+    - celular
+    - codigo_pais
+    - fecha_nacimiento
+    - genero
+    - nacionalidad
+    - nombre
+    type: object
   types.UsuariosRegister:
     properties:
       Correo_electronico:
@@ -81,8 +109,6 @@ paths:
       responses:
         "200":
           description: OK
-      security:
-      - Bearer: []
       summary: Registrar Usuario
       tags:
       - Usuario
@@ -94,9 +120,26 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.UsuariosModel'
+            type: array
       security:
       - Bearer: []
       summary: Listado de Usuarios
+      tags:
+      - Usuario
+  /v1/user:
+    get:
+      description: Obtener los datos del usuario por su id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UsuariosModel'
+      summary: Obtener Usuario por Id
       tags:
       - Usuario
 securityDefinitions:

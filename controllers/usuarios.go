@@ -55,6 +55,13 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
+// GetUserId godoc
+// @Summary Obtener Usuario por Id
+// @Description Obtener los datos del usuario por su id
+// @Produce application/json
+// @Tags Usuario
+// @Success 200 {object}  types.UsuariosModel
+// @Router /v1/user [get]
 func GetUserById(c *gin.Context) {
 	user, err := service.ServiceGetUserByID(c.MustGet("userID").(uint))
 	if err != nil {
@@ -69,8 +76,8 @@ func GetUserById(c *gin.Context) {
 // @Description Listado de usuarios
 // @Schemes
 // @Produce application/json
-// @Tags Usuario4
-// @Success 200
+// @Tags Usuario
+// @Success 200  {array}   types.UsuariosModel
 // @Router /v1/list [get]
 // @Security Bearer
 func GetAllUsers(c *gin.Context) {

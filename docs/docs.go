@@ -45,11 +45,6 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Guardar nuevo usuario",
                 "produces": [
                     "application/json"
@@ -93,7 +88,33 @@ const docTemplate = `{
                 "summary": "Listado de Usuarios",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.UsuariosModel"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user": {
+            "get": {
+                "description": "Obtener los datos del usuario por su id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuario"
+                ],
+                "summary": "Obtener Usuario por Id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.UsuariosModel"
+                        }
                     }
                 }
             }
@@ -111,6 +132,45 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.UsuariosModel": {
+            "type": "object",
+            "required": [
+                "Correo_electronico",
+                "apellidos",
+                "celular",
+                "codigo_pais",
+                "fecha_nacimiento",
+                "genero",
+                "nacionalidad",
+                "nombre"
+            ],
+            "properties": {
+                "Correo_electronico": {
+                    "type": "string"
+                },
+                "apellidos": {
+                    "type": "string"
+                },
+                "celular": {
+                    "type": "string"
+                },
+                "codigo_pais": {
+                    "type": "string"
+                },
+                "fecha_nacimiento": {
+                    "type": "string"
+                },
+                "genero": {
+                    "type": "string"
+                },
+                "nacionalidad": {
+                    "type": "string"
+                },
+                "nombre": {
                     "type": "string"
                 }
             }
