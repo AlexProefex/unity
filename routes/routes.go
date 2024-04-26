@@ -1,27 +1,20 @@
 package routes
 
 import (
-	"unity/initialize"
+	"unity/controllers"
+	"unity/middleware"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// albums slice to seed record album data.
-
-// getAlbums responds with the list of all albums as JSON.
-/*func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, api.ShowAlbum())
-}*/
-
 func Routes() {
 
 	router := gin.Default()
-	initialize.ConnectionDB()
+	//initialize.ConnectionDB()
 
-	url := ginSwagger.URL("http://localhost:8080/swagger/docs.json")
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	/*if err := http.ListenAndServe(":8080", nil); err != nil {
 	//handle error
@@ -40,7 +33,7 @@ func Routes() {
 
 		})*/
 
-	/*api := router.Group("/api")
+	api := router.Group("/api")
 	{
 		auth := api.Group("/auth")
 		{
@@ -60,7 +53,7 @@ func Routes() {
 		v1.GET("/hello", controllers.ShowAlbum)
 		v1.GET("/user", controllers.UserData)
 
-	}*/
+	}
 
 	router.Run("localhost:8080")
 

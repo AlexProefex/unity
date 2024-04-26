@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// RegisterUser godoc
+// @Summary Register User
+// @Description Save new user
+// @Param user body types.UsuariosRegister true "Create User"
+// @Produce application/json
+// @Tags user
+// @Success 200
+// @Router /api/auth/register [post]
+
 func Register(c *gin.Context) {
 	var err error
 	var input types.UsuariosRegister

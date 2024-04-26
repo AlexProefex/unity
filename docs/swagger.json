@@ -1,7 +1,86 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "List of all api services",
+        "title": "Api urls for Unity Application",
+        "contact": {},
+        "version": "1.0"
     },
-    "paths": {}
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "description": "Save new user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "Create User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UsuariosRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.UsuariosRegister": {
+            "type": "object",
+            "required": [
+                "Correo_electronico",
+                "apellidos",
+                "celular",
+                "codigo_pais",
+                "fecha_nacimiento",
+                "genero",
+                "nacionalidad",
+                "nombre",
+                "password"
+            ],
+            "properties": {
+                "Correo_electronico": {
+                    "type": "string"
+                },
+                "apellidos": {
+                    "type": "string"
+                },
+                "celular": {
+                    "type": "string"
+                },
+                "codigo_pais": {
+                    "type": "string"
+                },
+                "fecha_nacimiento": {
+                    "type": "string"
+                },
+                "genero": {
+                    "type": "string"
+                },
+                "nacionalidad": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

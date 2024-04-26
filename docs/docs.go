@@ -14,17 +14,91 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "description": "Save new user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "Create User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UsuariosRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.UsuariosRegister": {
+            "type": "object",
+            "required": [
+                "Correo_electronico",
+                "apellidos",
+                "celular",
+                "codigo_pais",
+                "fecha_nacimiento",
+                "genero",
+                "nacionalidad",
+                "nombre",
+                "password"
+            ],
+            "properties": {
+                "Correo_electronico": {
+                    "type": "string"
+                },
+                "apellidos": {
+                    "type": "string"
+                },
+                "celular": {
+                    "type": "string"
+                },
+                "codigo_pais": {
+                    "type": "string"
+                },
+                "fecha_nacimiento": {
+                    "type": "string"
+                },
+                "genero": {
+                    "type": "string"
+                },
+                "nacionalidad": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:8080",
+	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Api urls for Unity Application",
+	Description:      "List of all api services",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
