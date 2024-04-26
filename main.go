@@ -10,9 +10,10 @@ import (
 // @description  List of all api services
 // @host localhost:8080
 // @BasePath /api
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 func main() {
-
-	//token, _ := utils.GenerateToken(20)
-	//utils.ExtractTokenID(token)
 	routes.Routes()
 }

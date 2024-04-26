@@ -2,6 +2,7 @@ package routes
 
 import (
 	"unity/controllers"
+	"unity/initialize"
 	"unity/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 func Routes() {
 
 	router := gin.Default()
-	//initialize.ConnectionDB()
+	initialize.ConnectionDB()
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -49,9 +50,9 @@ func Routes() {
 		v1 := api.Group("/v1")
 		v1.Use(middleware.JwtAuth())
 		api.GET("/albums", controllers.ShowAlbum)
-		v1.GET("/all", controllers.GetAllUsers)
+		v1.GET("/list", controllers.GetAllUsers)
 		v1.GET("/hello", controllers.ShowAlbum)
-		v1.GET("/user", controllers.UserData)
+		v1.GET("/user", controllers.GetUserById)
 
 	}
 

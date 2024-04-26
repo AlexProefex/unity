@@ -1,9 +1,108 @@
 basePath: /api
+definitions:
+  types.UsuariosLogin:
+    properties:
+      Correo_electronico:
+        type: string
+      password:
+        type: string
+    required:
+    - Correo_electronico
+    - password
+    type: object
+  types.UsuariosRegister:
+    properties:
+      Correo_electronico:
+        type: string
+      apellidos:
+        type: string
+      celular:
+        type: string
+      codigo_pais:
+        type: string
+      fecha_nacimiento:
+        type: string
+      genero:
+        type: string
+      nacionalidad:
+        type: string
+      nombre:
+        type: string
+      password:
+        type: string
+    required:
+    - Correo_electronico
+    - apellidos
+    - celular
+    - codigo_pais
+    - fecha_nacimiento
+    - genero
+    - nacionalidad
+    - nombre
+    - password
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: List of all api services
   title: Api urls for Unity Application
   version: "1.0"
-paths: {}
+paths:
+  /auth/login:
+    post:
+      description: Autentificar usuario
+      parameters:
+      - description: Autentificar Usuario
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/types.UsuariosLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Login Usuario
+      tags:
+      - Usuario
+  /auth/register:
+    post:
+      description: Guardar nuevo usuario
+      parameters:
+      - description: Create User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/types.UsuariosRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - Bearer: []
+      summary: Registrar Usuario
+      tags:
+      - Usuario
+  /v1/list:
+    get:
+      description: Listado de usuarios
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - Bearer: []
+      summary: Listado de Usuarios
+      tags:
+      - Usuario
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
