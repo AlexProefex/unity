@@ -1,59 +1,9 @@
 basePath: /api
-definitions:
-  types.UsuariosRegister:
-    properties:
-      Correo_electronico:
-        type: string
-      apellidos:
-        type: string
-      celular:
-        type: string
-      codigo_pais:
-        type: string
-      fecha_nacimiento:
-        type: string
-      genero:
-        type: string
-      nacionalidad:
-        type: string
-      nombre:
-        type: string
-      password:
-        type: string
-    required:
-    - Correo_electronico
-    - apellidos
-    - celular
-    - codigo_pais
-    - fecha_nacimiento
-    - genero
-    - nacionalidad
-    - nombre
-    - password
-    type: object
 host: localhost:8080
 info:
   contact: {}
   description: List of all api services
   title: Api urls for Unity Application
   version: "1.0"
-paths:
-  /api/auth/register:
-    post:
-      description: Save new user
-      parameters:
-      - description: Create User
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/types.UsuariosRegister'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Register User
-      tags:
-      - user
+paths: {}
 swagger: "2.0"
