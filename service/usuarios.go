@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"unity/repository/dao"
 	"unity/types"
 )
@@ -38,4 +39,57 @@ func ServiceGetAllUser() ([]dao.Usuarios, error) {
 
 	user, err := dao.GetAllUser()
 	return user, err
+}
+
+func ServiceRecuperarContrasena(input types.UsuariosPassword) (dao.Usuarios, error) {
+
+	usuarios := dao.Usuarios{
+		Correo_electronico: input.Correo_electronico,
+		Password:           input.Password,
+		Secret:             input.Secret,
+	}
+
+	_, err := usuarios.ConsultarEmail(input.Correo_electronico)
+	if err != nil {
+		return usuarios, err
+	}
+
+	usuario, err := usuarios.ConsultarSecret(input.Correo_electronico, input.Secret)
+	if err != nil {
+		return usuarios, err
+	}
+
+	usuario.Password = input.Password
+	_, err = usuario.CambiarPassword(usuario.ID)
+	if err != nil {
+		return usuarios, err
+	}
+
+	return usuario, err
+
+}
+
+func ServiceCambiarContrasena(input types.ConfirmPassword) (dao.Usuarios, error) {
+
+	usuarios := dao.Usuarios{
+		Correo_electronico: input.Correo_electronico,
+		Password:           input.Password,
+	}
+
+	usuario, err := usuarios.ConsultarEmail(input.Correo_electronico)
+	if err != nil {
+		return usuarios, errors.New("el correo no existe")
+	}
+
+	err = dao.VerifyPassword(input.Password, usuario.Password)
+	if err != nil {
+		return usuarios, errors.New("la contraseña ingresada es incorrecta")
+	}
+
+	usuario.Password = input.NewPassword
+
+	_, err = usuario.CambiarPassword(usuario.ID)
+
+	return usuarios, err
+
 }

@@ -89,3 +89,34 @@ func GetAllUsers(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, user)
 }
+
+func RecuperarContrasena(c *gin.Context) {
+
+	var input types.UsuariosPassword
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	usuario, err := service.ServiceRecuperarContrasena(input)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, usuario)
+}
+
+func CambiarContrasena(c *gin.Context) {
+	var input types.ConfirmPassword
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	usuario, err := service.ServiceCambiarContrasena(input)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, usuario)
+}

@@ -1,5 +1,16 @@
 {
     "cSpell.words": [
         "Usuarios"
-    ]
+    ],
+
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "variable",
+                "settings": {
+                    "foreground": "#2DCD76",
+                }
+            }
+        ]
+    }
 }

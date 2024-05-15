@@ -27,3 +27,28 @@ type UsuariosModel struct {
 	Fecha_nacimiento   string `json:"fecha_nacimiento" binding:"required"`
 	Nacionalidad       string `json:"nacionalidad" binding:"required"`
 }
+
+type UsuariosInsignia struct {
+	Cantidad int `json:"cantidad" binding:"required"`
+}
+
+type UsuariosPuntos struct {
+	Puntos int `json:"puntos" binding:"required"`
+}
+
+type UsuariosValidateCP struct {
+	Cantidad int `json:"cantidad"`
+	Puntos   int `json:"puntos"`
+}
+
+type UsuariosPassword struct {
+	Correo_electronico string `json:"Correo_electronico" binding:"required,email"`
+	Password           string `json:"password" binding:"required"`
+	Secret             string `json:"secret" binding:"required"`
+}
+
+type ConfirmPassword struct {
+	Correo_electronico string `json:"Correo_electronico" binding:"required,email"`
+	Password           string `json:"password" binding:"required"`
+	NewPassword        string `json:"newpassword" binding:"required"`
+}
