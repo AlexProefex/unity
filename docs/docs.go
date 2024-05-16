@@ -15,6 +15,76 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/recover": {
+            "post": {
+                "description": "Permite recuperar la contraseña mediante la clave unica",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuario"
+                ],
+                "summary": "Recuperar Contraseña",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ValidarPassword"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/usuario/change-password": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Permite cambiar la contraseña mediante el ingreso de la clave anterior",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuario"
+                ],
+                "summary": "Cambiar la Contraseña",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CambiarPassword"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/usuario/update-perfild": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Permite cambiar los datos del perfil del usuario",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuario"
+                ],
+                "summary": "Cambiar los datos del perfil",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Perfil"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Autentificar usuario",
@@ -32,7 +102,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.UsuariosLogin"
+                            "$ref": "#/definitions/Login"
                         }
                     }
                 ],
@@ -60,7 +130,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.UsuariosRegister"
+                            "$ref": "#/definitions/Registro"
                         }
                     }
                 ],
@@ -92,7 +162,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/types.UsuariosModel"
+                                "$ref": "#/definitions/Usuario"
                             }
                         }
                     }
@@ -113,7 +183,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.UsuariosModel"
+                            "$ref": "#/definitions/Usuario"
                         }
                     }
                 }
@@ -121,7 +191,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "types.UsuariosLogin": {
+        "CambiarPassword": {
+            "type": "object",
+            "required": [
+                "Correo_electronico",
+                "newpassword",
+                "password"
+            ],
+            "properties": {
+                "Correo_electronico": {
+                    "type": "string"
+                },
+                "newpassword": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Login": {
             "type": "object",
             "required": [
                 "Correo_electronico",
@@ -136,7 +225,69 @@ const docTemplate = `{
                 }
             }
         },
-        "types.UsuariosModel": {
+        "Perfil": {
+            "type": "object",
+            "required": [
+                "apellidos",
+                "nombre"
+            ],
+            "properties": {
+                "apellidos": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                }
+            }
+        },
+        "Registro": {
+            "type": "object",
+            "required": [
+                "Correo_electronico",
+                "apellidos",
+                "celular",
+                "codigo_pais",
+                "fecha_nacimiento",
+                "genero",
+                "nacionalidad",
+                "nombre",
+                "password",
+                "secret"
+            ],
+            "properties": {
+                "Correo_electronico": {
+                    "type": "string"
+                },
+                "apellidos": {
+                    "type": "string"
+                },
+                "celular": {
+                    "type": "string"
+                },
+                "codigo_pais": {
+                    "type": "string"
+                },
+                "fecha_nacimiento": {
+                    "type": "string"
+                },
+                "genero": {
+                    "type": "string"
+                },
+                "nacionalidad": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "Usuario": {
             "type": "object",
             "required": [
                 "Correo_electronico",
@@ -175,45 +326,21 @@ const docTemplate = `{
                 }
             }
         },
-        "types.UsuariosRegister": {
+        "ValidarPassword": {
             "type": "object",
             "required": [
                 "Correo_electronico",
-                "apellidos",
-                "celular",
-                "codigo_pais",
-                "fecha_nacimiento",
-                "genero",
-                "nacionalidad",
-                "nombre",
-                "password"
+                "password",
+                "secret"
             ],
             "properties": {
                 "Correo_electronico": {
                     "type": "string"
                 },
-                "apellidos": {
-                    "type": "string"
-                },
-                "celular": {
-                    "type": "string"
-                },
-                "codigo_pais": {
-                    "type": "string"
-                },
-                "fecha_nacimiento": {
-                    "type": "string"
-                },
-                "genero": {
-                    "type": "string"
-                },
-                "nacionalidad": {
-                    "type": "string"
-                },
-                "nombre": {
-                    "type": "string"
-                },
                 "password": {
+                    "type": "string"
+                },
+                "secret": {
                     "type": "string"
                 }
             }

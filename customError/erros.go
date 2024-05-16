@@ -1,16 +1,20 @@
 package customError
 
-import "strings"
+import (
+	"errors"
+	"strings"
+	"unity/utils"
+)
 
 type UniqueError struct{}
 
 func (m *UniqueError) Error() string {
-	return "El correo ya se encuentra registrado"
+	return utils.Duplicate_key
 }
 
 func ValidateUnique(err error) (string, error) {
 	if strings.Contains(err.Error(), "Error 1062 (23000): Duplicate entry") {
 		return "", &UniqueError{}
 	}
-	return "", err
+	return "", errors.New(utils.Ha_ocurrido_un_error)
 }

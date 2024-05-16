@@ -1,6 +1,19 @@
 basePath: /api
 definitions:
-  types.UsuariosLogin:
+  CambiarPassword:
+    properties:
+      Correo_electronico:
+        type: string
+      newpassword:
+        type: string
+      password:
+        type: string
+    required:
+    - Correo_electronico
+    - newpassword
+    - password
+    type: object
+  Login:
     properties:
       Correo_electronico:
         type: string
@@ -10,7 +23,51 @@ definitions:
     - Correo_electronico
     - password
     type: object
-  types.UsuariosModel:
+  Perfil:
+    properties:
+      apellidos:
+        type: string
+      nombre:
+        type: string
+    required:
+    - apellidos
+    - nombre
+    type: object
+  Registro:
+    properties:
+      Correo_electronico:
+        type: string
+      apellidos:
+        type: string
+      celular:
+        type: string
+      codigo_pais:
+        type: string
+      fecha_nacimiento:
+        type: string
+      genero:
+        type: string
+      nacionalidad:
+        type: string
+      nombre:
+        type: string
+      password:
+        type: string
+      secret:
+        type: string
+    required:
+    - Correo_electronico
+    - apellidos
+    - celular
+    - codigo_pais
+    - fecha_nacimiento
+    - genero
+    - nacionalidad
+    - nombre
+    - password
+    - secret
+    type: object
+  Usuario:
     properties:
       Correo_electronico:
         type: string
@@ -38,36 +95,18 @@ definitions:
     - nacionalidad
     - nombre
     type: object
-  types.UsuariosRegister:
+  ValidarPassword:
     properties:
       Correo_electronico:
         type: string
-      apellidos:
-        type: string
-      celular:
-        type: string
-      codigo_pais:
-        type: string
-      fecha_nacimiento:
-        type: string
-      genero:
-        type: string
-      nacionalidad:
-        type: string
-      nombre:
-        type: string
       password:
+        type: string
+      secret:
         type: string
     required:
     - Correo_electronico
-    - apellidos
-    - celular
-    - codigo_pais
-    - fecha_nacimiento
-    - genero
-    - nacionalidad
-    - nombre
     - password
+    - secret
     type: object
 host: localhost:8080
 info:
@@ -76,6 +115,49 @@ info:
   title: Api urls for Unity Application
   version: "1.0"
 paths:
+  /api/recover:
+    post:
+      description: Permite recuperar la contraseña mediante la clave unica
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ValidarPassword'
+      summary: Recuperar Contraseña
+      tags:
+      - Usuario
+  /api/v1/usuario/change-password:
+    post:
+      description: Permite cambiar la contraseña mediante el ingreso de la clave anterior
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CambiarPassword'
+      security:
+      - Bearer: []
+      summary: Cambiar la Contraseña
+      tags:
+      - Usuario
+  /api/v1/usuario/update-perfild:
+    post:
+      description: Permite cambiar los datos del perfil del usuario
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Perfil'
+      security:
+      - Bearer: []
+      summary: Cambiar los datos del perfil
+      tags:
+      - Usuario
   /auth/login:
     post:
       description: Autentificar usuario
@@ -85,7 +167,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/types.UsuariosLogin'
+          $ref: '#/definitions/Login'
       produces:
       - application/json
       responses:
@@ -103,7 +185,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/types.UsuariosRegister'
+          $ref: '#/definitions/Registro'
       produces:
       - application/json
       responses:
@@ -122,7 +204,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/types.UsuariosModel'
+              $ref: '#/definitions/Usuario'
             type: array
       security:
       - Bearer: []
@@ -138,7 +220,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.UsuariosModel'
+            $ref: '#/definitions/Usuario'
       summary: Obtener Usuario por Id
       tags:
       - Usuario
