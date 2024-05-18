@@ -10,20 +10,20 @@
 
 ## Instrucciones del Proyecto
 
-    <ol>
-        <li>
-            Copiar env.example y renombrar a .env
-        </li>
-        <li>
-            Ingresar las credenciales
-        </li>
-        <li>
-            go install
-        </li>
-        <li>
-            go run
-        </li>
-    </ol>
+<ol>
+    <li>
+        Copiar env.example y renombrar a .env
+    </li>
+    <li>
+        Ingresar las credenciales
+    </li>
+    <li>
+        go install
+    </li>
+    <li>
+        go run
+    </li>
+</ol>
 
 ## Generar Migraciones de los scrips de base de datos
 
