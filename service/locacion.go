@@ -4,6 +4,7 @@ import (
 	"errors"
 	"unity/repository/dao"
 	"unity/types"
+	"unity/utils"
 )
 
 func ServiceGetAllLocacion() ([]dao.Locacion, error) {
@@ -24,7 +25,6 @@ func ServiceSaveLocacion(input types.LocacionRegister) (dao.Locacion, error) {
 }
 
 func ServiceUpdateLocacion(input types.LocacionUpdate, id uint) (dao.Locacion, error) {
-
 	locacion := dao.Locacion{
 		ID:          input.ID,
 		Nombre:      input.Nombre,
@@ -33,18 +33,15 @@ func ServiceUpdateLocacion(input types.LocacionUpdate, id uint) (dao.Locacion, e
 		Longintud:   input.Longintud,
 		CategoriaId: input.Categoria,
 	}
-
 	if locacion.ID != id {
-		return locacion, errors.New("no se pudo actualizar el recurso solicitado")
+		return locacion, errors.New(utils.InvalidID)
 	}
 	current, err := locacion.UpdateLocacion(id)
 	return *current, err
 }
 
 func ServiceGetLocacionByID(uid uint) (dao.Locacion, error) {
-	locacion := dao.Locacion{
-		ID: uid,
-	}
+	locacion := dao.Locacion{}
 	locacion, err := locacion.GetLocacionByID(uid)
 	return locacion, err
 }

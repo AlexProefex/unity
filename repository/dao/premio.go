@@ -4,27 +4,31 @@ import (
 	"errors"
 	"unity/initialize"
 	"unity/repository/model"
+	"unity/utils"
+
+	"gorm.io/gorm"
 )
 
 type Premio model.Premio
 
 func GetAllPremios() ([]Premio, error) {
-
 	var premio []Premio
-
 	if err := initialize.DB.Find(&premio).Error; err != nil {
-		return premio, errors.New("data not found")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return premio, errors.New(utils.Not_found)
+		}
+		return premio, errors.New(utils.Ha_ocurrido_un_error)
 	}
-
 	return premio, nil
 }
 
 func (premio *Premio) SavePremio() (*Premio, error) {
-
 	err := initialize.DB.Create(premio).Error
-
 	if err != nil {
-		return &Premio{}, errors.New("data not found")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return premio, errors.New(utils.Not_found)
+		}
+		return premio, errors.New(utils.Ha_ocurrido_un_error)
 	}
 	return premio, err
 }

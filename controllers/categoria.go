@@ -5,20 +5,26 @@ import (
 	"strconv"
 	"unity/service"
 	"unity/types"
+	"unity/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
+// Listar CAtegoerias []
 func GetAllCategorias(c *gin.Context) {
 	categoria, err := service.ServiceGetAllCategoria()
-
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		if err.Error() == utils.Not_found {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, categoria)
 }
 
+// Registrar Categoria
 func RegistrarCategoria(c *gin.Context) {
 	var err error
 	var input types.CategoriaRegister
@@ -31,23 +37,20 @@ func RegistrarCategoria(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "categoria registrada "})
+	c.JSON(http.StatusOK, gin.H{"message": "Categoria Registrada "})
 }
 
+// Actualizar Categoria
 func ActualizarCategoria(c *gin.Context) {
-
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidID})
 		return
 	}
-
 	uid := uint(id)
-
 	var input types.CategoriaUpdate
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-
 		return
 	}
 	_, err = service.ServiceUpdateCategoria(input, uid)
@@ -55,39 +58,45 @@ func ActualizarCategoria(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "categoria actualizada "})
+	c.JSON(http.StatusOK, gin.H{"message": "Categoria Actualizada"})
 }
 
+// Obtener Categoria por Id
 func GetCategoriaById(c *gin.Context) {
 
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidID})
 		return
 	}
-
 	uid := uint(id)
-
-	categoria, err := service.ServiceGetCAtegoriaByID(uid)
+	categoria, err := service.ServiceGetCategoriaByID(uid)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		if err.Error() == utils.Not_found {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, categoria)
 }
 
+// Obtener Challenge
 func GetChallenge(c *gin.Context) {
-	var input types.CategoriaChallenge
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidID})
 		return
 	}
-
-	categoria, err := service.ServiceGetChallenge(input)
-
+	uid := uint(id)
+	categoria, err := service.ServiceGetChallenge(uid)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		if err.Error() == utils.Not_found {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, categoria)
@@ -95,51 +104,49 @@ func GetChallenge(c *gin.Context) {
 
 func GenerateChallenge(c *gin.Context) {
 	var input types.CategoriaChallenge
-
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	err := service.ServiceSetChallenge(input)
-
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		if err.Error() == utils.Not_found {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	c.JSON(http.StatusOK, "Challenge creado")
 }
 
 func GenerateMiniChallenge(c *gin.Context) {
 	var input types.CategoriaChallenge
-
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	err := service.ServiceSetMiniChallenge(input)
-
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		if err.Error() == utils.Not_found {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	c.JSON(http.StatusOK, "MiniChallengw creado")
 }
 
 func RestartMiniChallenge(c *gin.Context) {
 	var input types.CategoriaChallenge
-
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	err := service.ServiceRemoveMiniChallenge()
-
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 }

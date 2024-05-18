@@ -11,12 +11,9 @@ import (
 )
 
 func Routes() {
-
 	router := gin.Default()
 	initialize.ConnectionDB()
-
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	/*if err := http.ListenAndServe(":8080", nil); err != nil {
 	//handle error
 	}*/
@@ -33,7 +30,6 @@ func Routes() {
 		c.JSON(http.StatusOK, gin.H{"success": true})
 
 		})*/
-
 	api := router.Group("/api")
 	{
 		auth := api.Group("/auth")
@@ -41,24 +37,23 @@ func Routes() {
 			// Register and login routes
 			auth.POST("/register", controllers.Register)
 			auth.POST("/login", controllers.Login)
-
 		}
-
 		//api.GET("/albums", controllers.ShowAlbum)
 		// Profile route with JWT authentication middleware
 		//api.GET("/profile", middleware.JwtAuthMiddleware(), controllers.Profile)
-
 		customer := api.Group("customer")
-		customer.Use(middleware.JwtQRAuth())
-		customer.POST("/puntos", controllers.CanjearRecompesasPuntos)
-		customer.POST("/insignias", controllers.CanjearRecompesasInsignia)
-
+		{
+			customer.Use(middleware.JwtQRAuth())
+			customer.POST("/puntos", controllers.CanjearRecompesasPuntos)
+			customer.POST("/insignias", controllers.CanjearRecompesasInsignia)
+		}
 		recover := api.Group("recover")
-		recover.POST("/", controllers.RecuperarContrasena)
+		{
+			recover.POST("/", controllers.RecuperarContrasena)
+		}
 
 		v1 := api.Group("/v1")
 		v1.Use(middleware.JwtAuth())
-
 		categoria := v1.Group("/categoria")
 		{
 			categoria.GET("/", controllers.GetAllCategorias)
@@ -66,14 +61,13 @@ func Routes() {
 			categoria.POST("/mini-challenge", controllers.GenerateMiniChallenge)
 			categoria.POST("/restart-challenge", controllers.RestartMiniChallenge)
 
-			categoria.POST("/routes", controllers.GetChallenge)
+			categoria.GET("/routes/:id", controllers.GetChallenge)
 
 			categoria.POST("/", controllers.RegistrarCategoria)
 			categoria.PUT("/:id", controllers.ActualizarCategoria)
 			categoria.GET("/:id", controllers.GetCategoriaById)
 
 		}
-
 		locacion := v1.Group("/locacion")
 		{
 			locacion.GET("/", controllers.GetAllLocacion)
@@ -82,7 +76,6 @@ func Routes() {
 			locacion.GET("/:id", controllers.GetCategoriaById)
 
 		}
-
 		recompensa := v1.Group("/recompensa")
 		{
 			recompensa.GET("/", controllers.GetAllRecompensa)
@@ -94,7 +87,6 @@ func Routes() {
 			recompensa.POST("/points", controllers.CanjearRecompesasPuntos)
 
 		}
-
 		premio := v1.Group("/premio")
 		{
 			premio.GET("/", controllers.GetAllPremio)
@@ -104,30 +96,15 @@ func Routes() {
 			premio.GET("/:id", controllers.GetPremioById)
 
 		}
-
 		usuario := v1.Group("/usuario")
 		{
 			usuario.GET("/profile", controllers.GetUserById)
 			usuario.POST("/change-password", controllers.CambiarContrasena)
 			usuario.POST("/update-perfil", controllers.UpdatePerfil)
 			usuario.POST("/points", controllers.AsignarPuntos)
-
-			//usuario.POST("/", controllers.RegistrarPremio)
-			//usuario.PUT("/:id", controllers.ActualizarPremio)
-			//usuario.GET("/:id", controllers.GetPremioById)
 		}
-
-		//v1.GET("/categorias", controllers.GetAllCategorias)
-
-		//api.GET("/albums", controllers.ShowAlbum)
-		//v1.GET("/list", controllers.GetAllUsers)
-		//v1.GET("/user", controllers.GetUserById)
-		//v1.GET("/hello", controllers.ShowAlbum)
-
 	}
-
 	router.Run("localhost:8080")
-
 }
 
 //r := gin.Default()
