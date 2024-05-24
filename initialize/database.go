@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"unity/repository/migrations"
 
 	"github.com/lpernett/godotenv"
@@ -14,8 +15,11 @@ import (
 var DB *gorm.DB
 
 func init() {
-
-	err := godotenv.Load()
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	err = godotenv.Load(filepath.Join(pwd, "../.env"))
 
 	if err != nil {
 		log.Fatal("Error loading .env file")

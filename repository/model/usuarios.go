@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -13,7 +15,7 @@ type Usuarios struct {
 	Codigo_pais        string            `gorm:"size:255;not null;" json:"codigo_pais"`
 	Celular            string            `gorm:"size:255;not null;" json:"celular"`
 	Genero             string            `gorm:"size:255;not null;" json:"genero"`
-	Fecha_nacimiento   string            `gorm:"size:255;not null;" json:"fecha_nacimiento"`
+	Fecha_nacimiento   time.Time         `gorm:"size:255;not null;" json:"fecha_nacimiento"`
 	Nacionalidad       string            `gorm:"size:255;not null;" json:"nacionalidad"`
 	Password           string            `gorm:"size:255;not null;" json:"-"`
 	Puntos             int               `gorm:"default:0" json:"puntos"`

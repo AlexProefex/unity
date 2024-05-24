@@ -1,16 +1,18 @@
 package types
 
+import "time"
+
 type UsuariosRegister struct {
-	Nombre             string `json:"nombre" binding:"required"`
-	Apellidos          string `json:"apellidos" binding:"required"`
-	Correo_electronico string `json:"Correo_electronico" binding:"required,email"`
-	Codigo_pais        string `json:"codigo_pais" binding:"required"`
-	Celular            string `json:"celular" binding:"required"`
-	Genero             string `json:"genero" binding:"required"`
-	Fecha_nacimiento   string `json:"fecha_nacimiento" binding:"required"`
-	Nacionalidad       string `json:"nacionalidad" binding:"required"`
-	Password           string `json:"password" binding:"required"`
-	Secret             string `json:"secret" binding:"required"`
+	Nombre             string    `json:"nombre" binding:"required"`
+	Apellidos          string    `json:"apellidos" binding:"required"`
+	Correo_electronico string    `json:"Correo_electronico" binding:"required,email"`
+	Codigo_pais        string    `json:"codigo_pais" binding:"required"`
+	Celular            string    `json:"celular" binding:"required"`
+	Genero             string    `json:"genero" binding:"required"`
+	Fecha_nacimiento   time.Time `json:"fecha_nacimiento" binding:"required"`
+	Nacionalidad       string    `json:"nacionalidad" binding:"required"`
+	Password           string    `json:"password" binding:"required"`
+	Secret             string    `json:"secret" binding:"required"`
 } //@name Registro Usuario
 
 type UsuariosLogin struct {
@@ -19,14 +21,14 @@ type UsuariosLogin struct {
 } //@name Login
 
 type UsuariosModel struct {
-	Nombre             string `json:"nombre" binding:"required"`
-	Apellidos          string `json:"apellidos" binding:"required"`
-	Correo_electronico string `json:"Correo_electronico" binding:"required,email"`
-	Codigo_pais        string `json:"codigo_pais" binding:"required"`
-	Celular            string `json:"celular" binding:"required"`
-	Genero             string `json:"genero" binding:"required"`
-	Fecha_nacimiento   string `json:"fecha_nacimiento" binding:"required"`
-	Nacionalidad       string `json:"nacionalidad" binding:"required"`
+	Nombre             string    `json:"nombre" binding:"required"`
+	Apellidos          string    `json:"apellidos" binding:"required"`
+	Correo_electronico string    `json:"Correo_electronico" binding:"required,email"`
+	Codigo_pais        string    `json:"codigo_pais" binding:"required"`
+	Celular            string    `json:"celular" binding:"required"`
+	Genero             string    `json:"genero" binding:"required"`
+	Fecha_nacimiento   time.Time `json:"fecha_nacimiento" binding:"required"`
+	Nacionalidad       string    `json:"nacionalidad" binding:"required"`
 } //@name Usuario
 
 type UsuariosInsignia struct {
