@@ -98,6 +98,8 @@ func Routes() {
 		}
 		usuario := v1.Group("/usuario")
 		{
+
+			usuario.GET("/list", controllers.GetAllUsers)
 			usuario.GET("/profile", controllers.GetUserById)
 			usuario.POST("/change-password", controllers.CambiarContrasena)
 			usuario.POST("/update-perfil", controllers.UpdatePerfil)

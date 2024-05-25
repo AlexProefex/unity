@@ -3,13 +3,28 @@ package initialize
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"unity/repository/migrations"
 
+	"github.com/lpernett/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
+
+func init() {
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	err = godotenv.Load(filepath.Join(pwd, ".env"))
+
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
+}
 
 func ConnectionDB() {
 	var err error

@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Listar CAtegoerias []
 func GetAllCategorias(c *gin.Context) {
 	categoria, err := service.ServiceGetAllCategoria()
 	if err != nil {
@@ -24,7 +23,6 @@ func GetAllCategorias(c *gin.Context) {
 	c.JSON(http.StatusOK, categoria)
 }
 
-// Registrar Categoria
 func RegistrarCategoria(c *gin.Context) {
 	var err error
 	var input types.CategoriaRegister
@@ -40,7 +38,6 @@ func RegistrarCategoria(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Categoria Registrada "})
 }
 
-// Actualizar Categoria
 func ActualizarCategoria(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
@@ -61,7 +58,6 @@ func ActualizarCategoria(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Categoria Actualizada"})
 }
 
-// Obtener Categoria por Id
 func GetCategoriaById(c *gin.Context) {
 
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
@@ -82,7 +78,6 @@ func GetCategoriaById(c *gin.Context) {
 	c.JSON(http.StatusOK, categoria)
 }
 
-// Obtener Challenge
 func GetChallenge(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
