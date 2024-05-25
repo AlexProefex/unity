@@ -1,8 +1,12 @@
 package main
 
 import (
-	_ "unity/docs"
+	"log"
+	"os"
+	"path/filepath"
 	"unity/routes"
+
+	"github.com/lpernett/godotenv"
 )
 
 // @title Api urls for Unity Application
@@ -14,6 +18,18 @@ import (
 // @in header
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
+
 func main() {
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	err = godotenv.Load(filepath.Join(pwd, ".env"))
+
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	routes.Routes()
 }

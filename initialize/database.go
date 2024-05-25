@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"os"
 	"unity/repository/migrations"
 
 	"gorm.io/driver/mysql"
@@ -10,36 +11,22 @@ import (
 
 var DB *gorm.DB
 
-/*
-	func init() {
-		pwd, err := os.Getwd()
-		if err != nil {
-			panic(err)
-		}
-		err = godotenv.Load(filepath.Join(pwd, ".env"))
-
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-
-}
-*/
 func ConnectionDB() {
 	var err error
-	driver := "mysql"
-	//os.Getenv("DRIVER")
-	host := "127.0.0.1"
-	//os.Getenv("HOST")
-	user := "kiru"
-	//os.Getenv("USER")
-	password := "&I%g2o{icSqC"
-	//os.Getenv("PASSWORD")
-	dbName := "text"
-	//os.Getenv("DBNAME")
-	dbPor := "3306"
-	//os.Getenv("PORT")
+	//driver := "mysql"
+	driver := os.Getenv("DRIVER")
+	//host := "127.0.0.1"
+	host := os.Getenv("HOST")
+	//user := "kiru"
+	user := os.Getenv("USER")
+	//password := "&I%g2o{icSqC"
+	password := os.Getenv("PASSWORD")
+	//dbName := "text"
+	dbName := os.Getenv("DBNAME")
+	//dbPort := "3306"
+	dbPort := os.Getenv("PORT")
 
-	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, dbPor, dbName)
+	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, dbPort, dbName)
 	fmt.Println(url + driver)
 
 	DB, err = gorm.Open(mysql.Open(url), &gorm.Config{})
