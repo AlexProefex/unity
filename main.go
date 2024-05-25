@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 	"unity/routes"
@@ -28,7 +28,7 @@ func main() {
 	err = godotenv.Load(filepath.Join(pwd, ".env"))
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		fmt.Println("Error loading .env file")
 	}
 
 	routes.Routes()

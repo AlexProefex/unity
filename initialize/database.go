@@ -18,7 +18,7 @@ func ConnectionDB() {
 	//host := "127.0.0.1"
 	host := os.Getenv("HOST")
 	//user := "kiru"
-	user := os.Getenv("USER")
+	user := os.Getenv("USUARIO")
 	//password := "&I%g2o{icSqC"
 	password := os.Getenv("PASSWORD")
 	//dbName := "text"
