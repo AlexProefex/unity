@@ -1,6 +1,10 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Categoria struct {
 	gorm.Model
@@ -8,6 +12,6 @@ type Categoria struct {
 	Nombre      string     `gorm:"size:255;not null;" json:"nombre"`
 	Descripcion string     `gorm:"size:255;not null;" json:"descripcion"`
 	Insignia    string     `gorm:"size:255;not null;" json:"insignia"`
-	Tiempo      string     `gorm:"size:255;not null;" json:"tiempo"`
+	Tiempo      time.Time  `gorm:"size:255;not null;" json:"tiempo"`
 	Locaciones  []Locacion `gorm:"foreignKey:CategoriaId"`
 }

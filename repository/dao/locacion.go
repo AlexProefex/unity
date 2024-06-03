@@ -48,3 +48,11 @@ func (locacion Locacion) GetLocacionByID(uid uint) (Locacion, error) {
 	}
 	return locacion, nil
 }
+
+func GetLocacionInEvent(elements []uint) ([]Locacion, error) {
+	var locacion []Locacion
+	if err := initialize.DB.Debug().Where("id IN ?", elements).Find(&locacion).Error; err != nil {
+		return locacion, errors.New(utils.Not_found)
+	}
+	return locacion, nil
+}

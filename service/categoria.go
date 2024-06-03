@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"time"
 	"unity/repository/dao"
@@ -80,6 +81,7 @@ func ServiceSetChallenge(input types.CategoriaChallenge) error {
 			}
 		}
 	}
+
 	return err
 }
 
@@ -87,10 +89,10 @@ func removeIndex(s []dao.Locacion, index int) []dao.Locacion {
 	return append(s[:index], s[index+1:]...)
 }
 
-func ServiceSetMiniChallenge(input types.CategoriaChallenge) error {
+func ServiceSetMiniChallenge(input types.CategoriaMiniChallenge) ([]dao.Locacion, error) {
 	locacion, err := dao.GetAllLocacion()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	source := rand.NewSource(time.Now().UnixNano())
 	rng := rand.New(source)
@@ -101,15 +103,33 @@ func ServiceSetMiniChallenge(input types.CategoriaChallenge) error {
 	}
 	count, err := dao.ValidateAsingRoutesById(input.Usuario, utils.EventMiniChallenge)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if count < 1 {
 		err = createMiniLocationOnUser(input, locacion, utils.EventMiniChallenge)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
-	return err
+	//dao.GetAllLocaionUsuarioByUserIdAndEstadoAndEvento
+	var keys []uint
+	locaciones, err := dao.GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(input.Usuario, utils.EventMiniChallenge)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range locaciones {
+		keys = append(keys, row.LocacionId)
+	}
+	fmt.Println(keys)
+	ubicaciones, err := dao.GetLocacionInEvent(keys)
+	fmt.Println(ubicaciones)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ubicaciones, err
 }
 
 func ServiceRemoveMiniChallenge() error {
@@ -132,7 +152,7 @@ func createLocationOnUser(input types.CategoriaChallenge, categoria []dao.Catego
 	return locaciones
 }
 
-func createMiniLocationOnUser(input types.CategoriaChallenge, locacion []dao.Locacion, evento string) error {
+func createMiniLocationOnUser(input types.CategoriaMiniChallenge, locacion []dao.Locacion, evento string) error {
 	var err error
 	var locaciones []dao.UsuarioLocacion
 	for _, row := range locacion {

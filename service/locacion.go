@@ -17,7 +17,7 @@ func ServiceSaveLocacion(input types.LocacionRegister) (dao.Locacion, error) {
 		Nombre:      input.Nombre,
 		Descripcion: input.Descripcion,
 		Latitud:     input.Latitud,
-		Longintud:   input.Longintud,
+		Longitud:    input.Longitud,
 		CategoriaId: input.Categoria,
 	}
 	current, err := locacion.SaveLocacion()
@@ -30,7 +30,7 @@ func ServiceUpdateLocacion(input types.LocacionUpdate, id uint) (dao.Locacion, e
 		Nombre:      input.Nombre,
 		Descripcion: input.Descripcion,
 		Latitud:     input.Latitud,
-		Longintud:   input.Longintud,
+		Longitud:    input.Longitud,
 		CategoriaId: input.Categoria,
 	}
 	if locacion.ID != id {

@@ -128,6 +128,14 @@ func GetAllLocaionUsuarioByUserIdAndEstado(uid uint) ([]UsuarioLocacion, error) 
 	return locacion_usuario, nil
 }
 
+func GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(uid uint, evento string) ([]UsuarioLocacion, error) {
+	var locacion_usuario []UsuarioLocacion
+	if err := initialize.DB.Where(&UsuarioLocacion{UsuarioId: uid, Estado: "Incompleto", Evento: evento}).Find(&locacion_usuario).Error; err != nil {
+		return locacion_usuario, errors.New(utils.Not_found)
+	}
+	return locacion_usuario, nil
+}
+
 func ValidateLocationById(uid uint) ([]UsuarioLocacion, error) {
 	var locacion_usuario []UsuarioLocacion
 	if err := initialize.DB.Where(&UsuarioLocacion{ID: uid, Estado: "Incompleto"}).First(&locacion_usuario).Error; err != nil {

@@ -116,12 +116,12 @@ func GenerateChallenge(c *gin.Context) {
 }
 
 func GenerateMiniChallenge(c *gin.Context) {
-	var input types.CategoriaChallenge
+	var input types.CategoriaMiniChallenge
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := service.ServiceSetMiniChallenge(input)
+	locaciones, err := service.ServiceSetMiniChallenge(input)
 	if err != nil {
 		if err.Error() == utils.Not_found {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -130,7 +130,7 @@ func GenerateMiniChallenge(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, "MiniChallengw creado")
+	c.JSON(http.StatusOK, gin.H{"miniChallenges": locaciones})
 }
 
 func RestartMiniChallenge(c *gin.Context) {
