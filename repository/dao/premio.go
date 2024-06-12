@@ -22,6 +22,28 @@ func GetAllPremios() ([]Premio, error) {
 	return premio, nil
 }
 
+func GetAllPremiosRegalos() ([]Premio, error) {
+	var premio []Premio
+	if err := initialize.DB.Where("tipo =?", utils.PremioRegalo).Find(&premio).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return premio, errors.New(utils.Not_found)
+		}
+		return premio, errors.New(utils.Ha_ocurrido_un_error)
+	}
+	return premio, nil
+}
+
+func GetAllPremiosDescuentos() ([]Premio, error) {
+	var premio []Premio
+	if err := initialize.DB.Where("tipo=?", utils.PremioDescuento).Find(&premio).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return premio, errors.New(utils.Not_found)
+		}
+		return premio, errors.New(utils.Ha_ocurrido_un_error)
+	}
+	return premio, nil
+}
+
 func (premio *Premio) SavePremio() (*Premio, error) {
 	err := initialize.DB.Create(premio).Error
 	if err != nil {

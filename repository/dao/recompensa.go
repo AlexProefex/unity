@@ -51,7 +51,7 @@ func GetAllRecompensasByUserId(uid uint) ([]Recompensa, error) {
 
 	var recompensa []Recompensa
 
-	if err := initialize.DB.Where("usuario_id", uid).Find(&recompensa).Error; err != nil {
+	if err := initialize.DB.Where("usuario_id", uid).Distinct("insignia_id").Find(&recompensa).Error; err != nil {
 		return recompensa, err
 	}
 

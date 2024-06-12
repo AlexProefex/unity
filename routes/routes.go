@@ -78,20 +78,22 @@ func Routes() {
 		}
 		recompensa := v1.Group("/recompensa")
 		{
+			recompensa.GET("/current", controllers.GetRecompensaByUserId)
+			recompensa.GET("/:id", controllers.GetRecompensaById)
 			recompensa.GET("/", controllers.GetAllRecompensa)
 			recompensa.POST("/", controllers.RegistrarRecompensa)
 			recompensa.PUT("/:id", controllers.ActualizarRecompensa)
-			recompensa.GET("/:id", controllers.GetRecompensaById)
-			recompensa.GET("/current", controllers.GetRecompensaByUserId)
 			recompensa.POST("/gift", controllers.CanjearRecompesasInsignia)
 			recompensa.POST("/points", controllers.CanjearRecompesasPuntos)
 
 		}
 		premio := v1.Group("/premio")
 		{
+			premio.GET("/descuento", controllers.GetAllPremioDescuento)
+			premio.GET("/regalo", controllers.GetAllPremioRegalo)
+			premio.POST("/qr", controllers.GenerateQRToken)
 			premio.GET("/", controllers.GetAllPremio)
 			premio.POST("/", controllers.RegistrarPremio)
-			premio.POST("/qr", controllers.GenerateQRToken)
 			premio.PUT("/:id", controllers.ActualizarPremio)
 			premio.GET("/:id", controllers.GetPremioById)
 

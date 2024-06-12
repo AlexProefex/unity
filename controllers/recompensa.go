@@ -78,7 +78,9 @@ func GetRecompensaById(c *gin.Context) {
 
 func GetRecompensaByUserId(c *gin.Context) {
 
-	recompensa, err := service.ServiceGetRecompensaByID(c.MustGet("userID").(uint))
+	//recompensa, err := service.ServiceGetRecompensaByID(c.MustGet("userID").(uint))
+	recompensa, err := service.ServiceGetAllRecompensaByUserId(c.MustGet("userID").(uint))
+
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return

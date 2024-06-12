@@ -11,13 +11,24 @@ func ServiceGetAllPremio() ([]dao.Premio, error) {
 	return premio, err
 }
 
+func ServiceGetAllPremioRegalo() ([]dao.Premio, error) {
+	premio, err := dao.GetAllPremiosRegalos()
+	return premio, err
+}
+
+func ServiceGetAllPremioDescuento() ([]dao.Premio, error) {
+	premio, err := dao.GetAllPremiosDescuentos()
+	return premio, err
+}
+
 func ServiceSavePremio(input types.PremioRegister) (dao.Premio, error) {
 	premio := dao.Premio{
-		Nombre:      input.Nombre,
-		Descripcion: input.Descripcion,
-		Imagen:      input.Imagen,
-		Tipo:        input.Tipo,
-		Descuento:   input.Descuento,
+		Nombre:         input.Nombre,
+		Descripcion:    input.Descripcion,
+		Imagen:         input.Imagen,
+		Tipo:           input.Tipo,
+		Descuento:      input.Descuento,
+		MontoDescuento: input.MontoDescuento,
 	}
 	current, err := premio.SavePremio()
 	return *current, err
@@ -26,12 +37,13 @@ func ServiceSavePremio(input types.PremioRegister) (dao.Premio, error) {
 func ServiceUpdatePremio(input types.PremioUpdate, id uint) (dao.Premio, error) {
 
 	premio := dao.Premio{
-		ID:          input.ID,
-		Nombre:      input.Nombre,
-		Descripcion: input.Descripcion,
-		Imagen:      input.Imagen,
-		Tipo:        input.Tipo,
-		Descuento:   input.Descuento,
+		ID:             input.ID,
+		Nombre:         input.Nombre,
+		Descripcion:    input.Descripcion,
+		Imagen:         input.Imagen,
+		Tipo:           input.Tipo,
+		Descuento:      input.Descuento,
+		MontoDescuento: input.MontoDescuento,
 	}
 
 	if premio.ID != id {
