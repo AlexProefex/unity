@@ -6,6 +6,7 @@ type LocacionRegister struct {
 	Latitud     string `json:"latitud" binding:"required"`
 	Longitud    string `json:"longitud" binding:"required"`
 	Categoria   uint   `json:"categoria" binding:"required"`
+	QR          string `json:"qr" binding:"required"`
 }
 
 type LocacionUpdate struct {
@@ -15,4 +16,5 @@ type LocacionUpdate struct {
 	Latitud     string `json:"latitud" binding:"required"`
 	Longitud    string `json:"longitud" binding:"required"`
 	Categoria   uint   `json:"categoria" binding:"required"`
+	QR          string `json:"qr" binding:"required"`
 }

@@ -105,7 +105,7 @@ func Routes() {
 			usuario.GET("/profile", controllers.GetUserById)
 			usuario.POST("/change-password", controllers.CambiarContrasena)
 			usuario.POST("/update-perfil", controllers.UpdatePerfil)
-			usuario.POST("/points", controllers.AsignarPuntos)
+			usuario.POST("/add-points", controllers.AsignarPuntos)
 		}
 	}
 	router.Run("localhost:8080")

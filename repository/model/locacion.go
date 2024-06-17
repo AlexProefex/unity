@@ -9,6 +9,7 @@ type Locacion struct {
 	Descripcion string            `gorm:"size:255;not null;" json:"descripcion"`
 	Latitud     string            `gorm:"size:255;not null;" json:"latitud"`
 	Longitud    string            `gorm:"size:255;not null;" json:"longitud"`
+	QR          string            `gorm:"size:255;not null;" json:"qr"`
 	Usuario     []UsuarioLocacion `gorm:"foreignKey:LocacionId;"`
 	CategoriaId uint
 }

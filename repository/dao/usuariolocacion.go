@@ -130,7 +130,7 @@ func GetAllLocaionUsuarioByUserIdAndEstado(uid uint) ([]UsuarioLocacion, error) 
 
 func GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(uid uint, evento string) ([]UsuarioLocacion, error) {
 	var locacion_usuario []UsuarioLocacion
-	if err := initialize.DB.Where(&UsuarioLocacion{UsuarioId: uid, Estado: "Incompleto", Evento: evento}).Find(&locacion_usuario).Error; err != nil {
+	if err := initialize.DB.Where(&UsuarioLocacion{UsuarioId: uid, Estado: utils.StatusIncomplete, Evento: evento}).Find(&locacion_usuario).Error; err != nil {
 		return locacion_usuario, errors.New(utils.Not_found)
 	}
 	return locacion_usuario, nil
@@ -138,7 +138,7 @@ func GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(uid uint, evento string) ([]
 
 func ValidateLocationById(uid uint) ([]UsuarioLocacion, error) {
 	var locacion_usuario []UsuarioLocacion
-	if err := initialize.DB.Where(&UsuarioLocacion{ID: uid, Estado: "Incompleto"}).First(&locacion_usuario).Error; err != nil {
+	if err := initialize.DB.Where(&UsuarioLocacion{LocacionId: uid, Estado: utils.StatusIncomplete}).First(&locacion_usuario).Error; err != nil {
 		return locacion_usuario, errors.New(utils.Not_found)
 	}
 	return locacion_usuario, nil
@@ -148,7 +148,7 @@ func ActualizarEstado(uid uint, puntos int, userid uint) error {
 
 	tx := initialize.DB.Begin()
 
-	if err := tx.Model(&UsuarioLocacion{}).Where("ID = ?", uid).Update("estado", "Completo").Error; err != nil {
+	if err := tx.Model(&UsuarioLocacion{}).Where(&UsuarioLocacion{LocacionId: uid, UsuarioId: userid}).Update("estado", utils.StatusComplete).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -170,7 +170,7 @@ func ValidateAsingRoutesById(uid uint, typeCat string) (int64, error) {
 
 func ValidateAsingComplete(uid uint, typeCat string) (int64, error) {
 	var count int64
-	if err := initialize.DB.Where(&UsuarioLocacion{UsuarioId: uid, Evento: typeCat, Estado: "Completo"}).Find(&UsuarioLocacion{}).Count(&count).Error; err != nil {
+	if err := initialize.DB.Where(&UsuarioLocacion{UsuarioId: uid, Evento: typeCat, Estado: utils.StatusComplete}).Find(&UsuarioLocacion{}).Count(&count).Error; err != nil {
 		return count, errors.New(utils.Not_found)
 	}
 	return count, nil

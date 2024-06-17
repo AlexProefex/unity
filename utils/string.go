@@ -9,6 +9,8 @@ const VerifyPassword = "las contraseñas no coinciden"
 const TokenError = "ha ocurrido un error al generar el token"
 const InvalidID = "identificador invalido"
 const StatusIncomplete = "Incompleto"
+const StatusComplete = "Completo"
+
 const EventChallenge = "Challenge"
 const EventMiniChallenge = "MiniChallenge"
 const PremioRegalo = "Premio"
