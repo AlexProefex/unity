@@ -48,8 +48,11 @@ func ServiceGetAllRecompensaByUserId(uid uint) ([]dao.Recompensa, error) {
 	return recompensa, err
 }
 
-func ServiceCobrarAgregarRecompensaInsignia(uid uint, cantidad int) (dao.Usuarios, error) {
+func ServiceCobrarAgregarRecompensaInsignia(uid uint, cantidad int, producto uint) (dao.Premio, error) {
 
+	fmt.Println("Lllegamos al servicio")
+
+	response := dao.Premio{}
 	recompensa := dao.Usuarios{
 		ID:       uid,
 		Cantidad: cantidad,
@@ -58,7 +61,7 @@ func ServiceCobrarAgregarRecompensaInsignia(uid uint, cantidad int) (dao.Usuario
 	recompensa, err := recompensa.GetUserByID(uid)
 
 	if err != nil {
-		return recompensa, err
+		return response, err
 	}
 
 	recompensa.Cantidad = recompensa.Cantidad - cantidad
@@ -67,18 +70,30 @@ func ServiceCobrarAgregarRecompensaInsignia(uid uint, cantidad int) (dao.Usuario
 
 	if recompensa.Cantidad < 0 {
 		fmt.Println("no cuentas con la cantidad de puntos suficientes")
-		return recompensa, errors.New("no cuentas con la cantidad de puntos suficientes")
+		return response, errors.New("no cuentas con la cantidad de puntos suficientes")
 
 	}
 
 	if recompensa.ID != uid {
-		return recompensa, errors.New("no se pudo actualizar el recurso solicitado")
+		return response, errors.New("no se pudo actualizar el recurso solicitado")
 	}
-	current, err := recompensa.CobrarAgregarRecompensaInsignia(uid)
-	return *current, err
+	_, err = recompensa.CobrarAgregarRecompensaInsignia(uid)
+	if err != nil {
+		return response, err
+	}
+	fmt.Println("llego aqui")
+	prima := dao.Premio{}
+	response, err = prima.GetPremioByID(uint(producto))
+	if err != nil {
+		return response, err
+	}
+
+	return response, err
 }
 
-func ServiceCobrarAgregarRecompensaPuntos(uid uint, puntos int) (dao.Usuarios, error) {
+func ServiceCobrarAgregarRecompensaPuntos(uid uint, puntos int, producto uint) (dao.Premio, error) {
+
+	response := dao.Premio{}
 
 	recompensa := dao.Usuarios{
 		ID:     uid,
@@ -88,23 +103,33 @@ func ServiceCobrarAgregarRecompensaPuntos(uid uint, puntos int) (dao.Usuarios, e
 	recompensa, err := recompensa.GetUserByID(uid)
 
 	if err != nil {
-		return recompensa, err
+		return response, err
 	}
 
 	recompensa.Puntos = recompensa.Puntos - puntos
 
 	if recompensa.Cantidad < 0 {
 		fmt.Println("no cuentas con la cantidad de puntos suficientes")
-		return recompensa, errors.New("no cuentas con la cantidad de puntos suficientes")
+		return response, errors.New("no cuentas con la cantidad de puntos suficientes")
 
 	}
 
 	if recompensa.ID != uid {
-		return recompensa, errors.New("no se pudo actualizar el recurso solicitado")
+		return response, errors.New("no se pudo actualizar el recurso solicitado")
 	}
 
-	current, err := recompensa.CobrarAgregarRecompensaPuntos(uid)
-	return *current, err
+	_, err = recompensa.CobrarAgregarRecompensaPuntos(uid)
+	if err != nil {
+		return response, err
+	}
+
+	prima := dao.Premio{}
+	response, err = prima.GetPremioByID(uint(producto))
+	if err != nil {
+		return response, err
+	}
+
+	return response, err
 }
 
 func ServiceGenerarPagoCodigoQR(input types.UsuariosValidateCP, uid uint) (string, error) {
@@ -128,8 +153,9 @@ func ServiceGenerarPagoCodigoQR(input types.UsuariosValidateCP, uid uint) (strin
 		return "", errors.New("no cuentas con la cantidad de puntos suficientes")
 
 	}
+	fmt.Println(input.Producto)
 
-	token, err := dao.GenerateQRToken(uid, input.Cantidad, input.Puntos)
+	token, err := dao.GenerateQRToken(uid, input.Cantidad, input.Puntos, input.Producto)
 
 	return token, err
 

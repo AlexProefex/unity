@@ -91,10 +91,10 @@ func GetRecompensaByUserId(c *gin.Context) {
 func CanjearRecompesasInsignia(c *gin.Context) {
 
 	id := c.MustGet("userID").(uint)
-
 	cantidad := c.MustGet("cantidad").(int)
+	producto := c.MustGet("producto").(uint)
 
-	recompensa, err := service.ServiceCobrarAgregarRecompensaInsignia(id, cantidad)
+	recompensa, err := service.ServiceCobrarAgregarRecompensaInsignia(id, cantidad, producto)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -107,12 +107,14 @@ func CanjearRecompesasPuntos(c *gin.Context) {
 
 	id := c.MustGet("userID").(uint)
 	puntos := c.MustGet("puntos").(int)
+	producto := c.MustGet("producto").(uint)
 
-	recompensa, err := service.ServiceCobrarAgregarRecompensaPuntos(id, puntos)
+	recompensa, err := service.ServiceCobrarAgregarRecompensaPuntos(id, puntos, producto)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, recompensa)
 }
 

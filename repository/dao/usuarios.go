@@ -2,6 +2,7 @@ package dao
 
 import (
 	"errors"
+	"fmt"
 	"unity/customError"
 	"unity/initialize"
 	"unity/repository/model"
@@ -101,7 +102,7 @@ func LoginCheck(correo_electrónico, password string) (string, error) {
 }
 
 // GenerateQRToken crea un token para realizar los cobros de premios
-func GenerateQRToken(uid uint, cantidad int, puntos int) (string, error) {
+func GenerateQRToken(uid uint, cantidad int, puntos int, producto int) (string, error) {
 	var err error
 	u := Usuarios{}
 	err = initialize.DB.Model(Usuarios{}).Where("ID = ?", uid).Take(&u).Error
@@ -111,7 +112,8 @@ func GenerateQRToken(uid uint, cantidad int, puntos int) (string, error) {
 		}
 		return "", err
 	}
-	token, err := utils.GenerateQrToken(u.ID, cantidad, puntos)
+	fmt.Println("QR SERvice ", producto)
+	token, err := utils.GenerateQrToken(u.ID, cantidad, puntos, producto)
 	if err != nil {
 		return "", errors.New(utils.Ha_ocurrido_un_error)
 	}

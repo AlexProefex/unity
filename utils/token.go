@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -29,12 +30,13 @@ func GenerateToken(userID uint) (string, error) {
 	return tokenString, nil
 }
 
-func GenerateQrToken(userId uint, cantidad int, puntos int) (string, error) {
+func GenerateQrToken(userId uint, cantidad int, puntos int, producto int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"user_id":  userId,
 			"cantidad": cantidad,
 			"puntos":   puntos,
+			"producto": producto,
 			"exp":      time.Now().Add(time.Minute * 60).Unix(),
 		})
 	tokenString, err := token.SignedString([]byte(secretKeyQR))
@@ -72,7 +74,7 @@ func ExtractTokenID(tokenString string) (uint, error) {
 }
 
 // ExtractTokenID extracts the user ID from the JWT token
-func ExtractQRTokenID(tokenString string) (uint, int, int, error) {
+func ExtractQRTokenID(tokenString string) (uint, int, int, uint, error) {
 	// Parse the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Check the signing method
@@ -84,19 +86,22 @@ func ExtractQRTokenID(tokenString string) (uint, int, int, error) {
 		return []byte(secretKeyQR), nil
 	})
 	if err != nil {
-		return 0, 0, 0, err
+		return 0, 0, 0, 0, err
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userID := uint(claims["user_id"].(float64))
 		cantidad := int(claims["cantidad"].(float64))
 		puntos := int(claims["puntos"].(float64))
+		producto := uint(claims["producto"].(float64))
+
 		fmt.Println(cantidad, puntos)
-		return userID, cantidad, puntos, nil
+		return userID, cantidad, puntos, producto, nil
 
 	}
 
-	return 0, 0, 0, fmt.Errorf("invalid token")
+	//fmt.Errorf("invalid token")
+	return 0, 0, 0, 0, errors.New("Invalid Token")
 
 }
 

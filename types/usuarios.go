@@ -40,8 +40,9 @@ type UsuariosPuntos struct {
 } //@name Puntos
 
 type UsuariosValidateCP struct {
+	Producto int `json:"producto" binding:"required"`
 	Cantidad int `json:"cantidad"`
-	Puntos   int `json:"puntos"`
+	Puntos   int `json:"puntos" `
 } //@name CanjearPuntos
 
 type UsuariosPassword struct {

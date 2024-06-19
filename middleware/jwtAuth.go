@@ -37,7 +37,7 @@ func JwtQRAuth() gin.HandlerFunc {
 		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
 		// Verify the token
-		userID, cantidad, puntos, err := utils.ExtractQRTokenID(tokenString)
+		userID, cantidad, puntos, producto, err := utils.ExtractQRTokenID(tokenString)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
@@ -48,6 +48,7 @@ func JwtQRAuth() gin.HandlerFunc {
 		c.Set("userID", userID)
 		c.Set("cantidad", cantidad)
 		c.Set("puntos", puntos)
+		c.Set("producto", producto)
 
 		c.Next()
 	}
