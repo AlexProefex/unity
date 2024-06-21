@@ -45,10 +45,12 @@ func SaveChallengeUsuario(challenges []UsuarioLocacion) error {
 	for _, locacion_usuario := range challenges {
 
 		if err := tx.Create(&UsuarioLocacion{
-			Evento:     locacion_usuario.Evento,
-			Estado:     locacion_usuario.Estado,
-			LocacionId: locacion_usuario.LocacionId,
-			UsuarioId:  locacion_usuario.UsuarioId,
+			Evento:          locacion_usuario.Evento,
+			Estado:          locacion_usuario.Estado,
+			LocacionId:      locacion_usuario.LocacionId,
+			UsuarioId:       locacion_usuario.UsuarioId,
+			FechaActivacion: locacion_usuario.FechaActivacion.Local(),
+			FechaTermino:    locacion_usuario.FechaTermino.Local(),
 		}).Error; err != nil {
 			tx.Rollback()
 			return err
@@ -65,10 +67,12 @@ func SaveAndDropChallengeUsuario(uid uint, challenges []UsuarioLocacion) error {
 	}
 	for _, locacion_usuario := range challenges {
 		if err := tx.Create(&UsuarioLocacion{
-			Evento:     locacion_usuario.Evento,
-			Estado:     locacion_usuario.Estado,
-			LocacionId: locacion_usuario.LocacionId,
-			UsuarioId:  locacion_usuario.UsuarioId,
+			Evento:          locacion_usuario.Evento,
+			Estado:          locacion_usuario.Estado,
+			LocacionId:      locacion_usuario.LocacionId,
+			UsuarioId:       locacion_usuario.UsuarioId,
+			FechaActivacion: locacion_usuario.FechaActivacion.Local(),
+			FechaTermino:    locacion_usuario.FechaTermino.Local(),
 		}).Error; err != nil {
 			tx.Rollback()
 			return err

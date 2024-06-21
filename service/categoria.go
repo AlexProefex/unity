@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 	"time"
 	"unity/repository/dao"
@@ -52,37 +51,54 @@ func ServiceGetChallenge(uid uint) ([]dao.Categoria, error) {
 	return categoria, err
 }
 
-func ServiceSetChallenge(input types.CategoriaChallenge) error {
+func ServiceSetChallenge(input types.CategoriaChallenge) ([]dao.Locacion, error) {
 	categoria, err := dao.GetChallenge(input.ID)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
 	count, err := dao.ValidateAsingRoutesById(input.Usuario, utils.EventChallenge)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
 	if count < 1 {
 		locaciones := createLocationOnUser(input, categoria, utils.EventChallenge)
 		err = dao.SaveChallengeUsuario(locaciones)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else {
 		locacion_usuario, err := dao.GetLocaionUsuarioByUsuarioID(input.Usuario, utils.EventChallenge)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		challengeRenue := utils.GetHours(input.Tiempo, locacion_usuario.CreatedAt.UTC())
+
+		challengeRenue := utils.GetHours(time.Now().Local(), locacion_usuario.FechaTermino.Local())
 		if challengeRenue {
 			locaciones := createLocationOnUser(input, categoria, utils.EventChallenge)
 			err = dao.SaveAndDropChallengeUsuario(input.Usuario, locaciones)
 			if err != nil {
-				return err
+				return nil, err
 			}
 		}
 	}
 
-	return err
+	var keys []uint
+	locaciones, err := dao.GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(input.Usuario, utils.EventChallenge)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range locaciones {
+		keys = append(keys, row.LocacionId)
+	}
+	ubicaciones, err := dao.GetLocacionInEvent(keys)
+	if err != nil {
+		return nil, err
+	}
+	return ubicaciones, err
+
 }
 
 func removeIndex(s []dao.Locacion, index int) []dao.Locacion {
@@ -121,9 +137,8 @@ func ServiceSetMiniChallenge(input types.CategoriaMiniChallenge) ([]dao.Locacion
 	for _, row := range locaciones {
 		keys = append(keys, row.LocacionId)
 	}
-	fmt.Println(keys)
+
 	ubicaciones, err := dao.GetLocacionInEvent(keys)
-	fmt.Println(ubicaciones)
 
 	if err != nil {
 		return nil, err
@@ -140,12 +155,16 @@ func ServiceRemoveMiniChallenge() error {
 
 func createLocationOnUser(input types.CategoriaChallenge, categoria []dao.Categoria, evento string) []dao.UsuarioLocacion {
 	var locaciones []dao.UsuarioLocacion
+	var currentTime = time.Now().Local()
+	var endTime = time.Now().Local().Add(time.Duration(categoria[0].Tiempo) * time.Hour)
 	for _, row := range categoria[0].Locaciones {
 		locaciones = append(locaciones, dao.UsuarioLocacion{
-			UsuarioId:  input.Usuario,
-			LocacionId: row.ID,
-			Evento:     evento,
-			Estado:     utils.StatusIncomplete,
+			UsuarioId:       input.Usuario,
+			LocacionId:      row.ID,
+			Evento:          evento,
+			Estado:          utils.StatusIncomplete,
+			FechaActivacion: currentTime,
+			FechaTermino:    endTime,
 		})
 	}
 

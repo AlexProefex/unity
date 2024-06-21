@@ -103,7 +103,7 @@ func GenerateChallenge(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := service.ServiceSetChallenge(input)
+	categoria, err := service.ServiceSetChallenge(input)
 	if err != nil {
 		if err.Error() == utils.Not_found {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -112,7 +112,7 @@ func GenerateChallenge(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, "Challenge creado")
+	c.JSON(http.StatusOK, categoria)
 }
 
 func GenerateMiniChallenge(c *gin.Context) {
