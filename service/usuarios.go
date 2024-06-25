@@ -98,7 +98,12 @@ func ServiceUpdatePerfil(input types.UpdatePerfil, uid uint) (dao.Usuarios, erro
 }
 
 func ServiceReclamarPuntos(input types.AsingarPuntos, uid uint) (string, error) {
-	count, err := dao.ValidateAsingRoutesById(uid, input.TypeRoute)
+
+	idInsignia := &input.Insignia
+
+	fmt.Println(idInsignia)
+
+	count, err := dao.ValidateAsingRoutesById(uid, input.TypeRoute, **idInsignia)
 	if err != nil {
 		return "dao.Usuarios{}", err
 	}
@@ -124,18 +129,18 @@ func ServiceReclamarPuntos(input types.AsingarPuntos, uid uint) (string, error) 
 	user.Puntos = user.Puntos + input.Puntos
 
 	fmt.Println("Utilidad", input.ID, user.Puntos, uid)
-	err = dao.ActualizarEstado(input.ID, user.Puntos, uid)
+	err = dao.ActualizarEstado(input.ID, user.Puntos, uid, **idInsignia)
 
 	if err != nil {
 		return "dao.Usuarios{}", err
 	}
 
-	cantidad, err := dao.ValidateAsingComplete(uid, input.TypeRoute)
+	cantidad, err := dao.ValidateAsingComplete(uid, input.TypeRoute, **idInsignia)
 	fmt.Println("paso 4")
 
 	if cantidad == count {
 		user.Cantidad = user.Cantidad + 1
-		dao.UpdateInsignia(uid, user.Cantidad, input.Insignia)
+		dao.UpdateInsignia(uid, user.Cantidad, **idInsignia)
 		fmt.Println("paso 4.2")
 		return "completo", err
 

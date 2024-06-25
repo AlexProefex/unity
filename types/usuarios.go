@@ -65,6 +65,6 @@ type UpdatePerfil struct {
 type AsingarPuntos struct {
 	ID        uint   `json:"id" binding:"required"`
 	Puntos    int    `json:"puntos" binding:"required"`
-	Insignia  uint   `json:"insignia" binding:"required"`
+	Insignia  *uint  `json:"insignia" binding:"required"`
 	TypeRoute string `json:"type" binding:"required"`
 } //@name Reclamar Puntos

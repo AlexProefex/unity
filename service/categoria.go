@@ -57,7 +57,7 @@ func ServiceSetChallenge(input types.CategoriaChallenge) ([]dao.Locacion, error)
 		return nil, err
 	}
 
-	count, err := dao.ValidateAsingRoutesById(input.Usuario, utils.EventChallenge)
+	count, err := dao.ValidateAsingRoutesByIdChallenge(input.Usuario, utils.EventChallenge, categoria[0].ID)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func ServiceSetChallenge(input types.CategoriaChallenge) ([]dao.Locacion, error)
 			return nil, err
 		}
 	} else {
-		locacion_usuario, err := dao.GetLocaionUsuarioByUsuarioID(input.Usuario, utils.EventChallenge)
+		locacion_usuario, err := dao.GetLocaionUsuarioByUsuarioIDByCategory(input.Usuario, utils.EventChallenge, categoria[0].ID)
 		if err != nil {
 			return nil, err
 		}
@@ -77,7 +77,7 @@ func ServiceSetChallenge(input types.CategoriaChallenge) ([]dao.Locacion, error)
 		challengeRenue := utils.GetHours(time.Now().Local(), locacion_usuario.FechaTermino.Local())
 		if challengeRenue {
 			locaciones := createLocationOnUser(input, categoria, utils.EventChallenge)
-			err = dao.SaveAndDropChallengeUsuario(input.Usuario, locaciones)
+			err = dao.SaveAndDropChallengeUsuario(input.Usuario, locaciones, categoria[0].ID)
 			if err != nil {
 				return nil, err
 			}
@@ -85,7 +85,7 @@ func ServiceSetChallenge(input types.CategoriaChallenge) ([]dao.Locacion, error)
 	}
 
 	var keys []uint
-	locaciones, err := dao.GetAllLocaionUsuarioByUserIdAndEstadoAndEvento(input.Usuario, utils.EventChallenge)
+	locaciones, err := dao.GetAllLocaionUsuarioByUserIdAndEstadoAndEventoAndCategory(input.Usuario, utils.EventChallenge, categoria[0].ID)
 
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func ServiceSetMiniChallenge(input types.CategoriaMiniChallenge) ([]dao.Locacion
 		index := rng.Intn(len(locacion)-1) + 1
 		locacion = removeIndex(locacion, index)
 	}
-	count, err := dao.ValidateAsingRoutesById(input.Usuario, utils.EventMiniChallenge)
+	count, err := dao.ValidateAsingRoutesById(input.Usuario, utils.EventMiniChallenge, utils.UIdMiniChallenge)
 	if err != nil {
 		return nil, err
 	}
@@ -165,6 +165,7 @@ func createLocationOnUser(input types.CategoriaChallenge, categoria []dao.Catego
 			Estado:          utils.StatusIncomplete,
 			FechaActivacion: currentTime,
 			FechaTermino:    endTime,
+			CategoriaId:     categoria[0].ID,
 		})
 	}
 

@@ -13,7 +13,7 @@ type Categoria model.Categoria
 
 func GetAllCategorias() ([]Categoria, error) {
 	var categoria []Categoria
-	if err := initialize.DB.Find(&categoria).Error; err != nil {
+	if err := initialize.DB.Where("id<>?", 0).Find(&categoria).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return categoria, errors.New(utils.Not_found)
 		}

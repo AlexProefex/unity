@@ -15,3 +15,7 @@ const EventChallenge = "Challenge"
 const EventMiniChallenge = "MiniChallenge"
 const PremioRegalo = "Premio"
 const PremioDescuento = "Descuento"
+
+const SecretKey = "Estaesunaclavesecreta"
+const SecretQR = "ClaveSecretadepagos"
+const UIdMiniChallenge = 0

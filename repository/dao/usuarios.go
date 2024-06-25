@@ -196,7 +196,7 @@ func UpdateInsignia(uid uint, cantidad int, insignia uint) error {
 		tx.Rollback()
 		return err
 	}
-	err = tx.Create(&Recompensa{UsuarioId: uid, InsigniaId: insignia}).Error
+	err = tx.Save(&Recompensa{UsuarioId: uid, InsigniaId: insignia}).Error
 	if err != nil {
 		tx.Rollback()
 		return err

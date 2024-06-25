@@ -11,18 +11,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var secretKey = "Estaesunaclavesecreta"
-var secretKeyQR = "ClaveSecretadepagos"
-
 // GenerateToken generates a new JWT token for the given user ID
 func GenerateToken(userID uint) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"user_id": userID,
-			"exp":     time.Now().Add(time.Hour * 24).Unix(),
+			"exp":     time.Now().Local().Add(time.Hour * 24).Unix(),
 		})
-
-	tokenString, err := token.SignedString([]byte(secretKey))
+	tokenString, err := token.SignedString([]byte(SecretKey))
 	if err != nil {
 		return "", err
 	}
@@ -37,9 +33,9 @@ func GenerateQrToken(userId uint, cantidad int, puntos int, producto int) (strin
 			"cantidad": cantidad,
 			"puntos":   puntos,
 			"producto": producto,
-			"exp":      time.Now().Add(time.Minute * 60).Unix(),
+			"exp":      time.Now().Local().Add(time.Minute * 60).Unix(),
 		})
-	tokenString, err := token.SignedString([]byte(secretKeyQR))
+	tokenString, err := token.SignedString([]byte(SecretQR))
 	if err != nil {
 		return "", err
 	}
@@ -54,9 +50,8 @@ func ExtractTokenID(tokenString string) (uint, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-
 		// Return the secret key
-		return []byte(secretKey), nil
+		return []byte(SecretKey), nil
 	})
 	if err != nil {
 		return 0, err
@@ -83,7 +78,7 @@ func ExtractQRTokenID(tokenString string) (uint, int, int, uint, error) {
 		}
 
 		// Return the secret key
-		return []byte(secretKeyQR), nil
+		return []byte(SecretQR), nil
 	})
 	if err != nil {
 		return 0, 0, 0, 0, err
@@ -101,7 +96,7 @@ func ExtractQRTokenID(tokenString string) (uint, int, int, uint, error) {
 	}
 
 	//fmt.Errorf("invalid token")
-	return 0, 0, 0, 0, errors.New("Invalid Token")
+	return 0, 0, 0, 0, errors.New("invalid token")
 
 }
 
@@ -109,7 +104,6 @@ func TokenCookie(c *gin.Context) {
 	// Get the token from the request header
 	authHeader := c.GetHeader("Authorization")
 	tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
-
 	// Set the token in the cookie
 	c.SetCookie("token", tokenString, 0, "/", "localhost", false, true)
 }
