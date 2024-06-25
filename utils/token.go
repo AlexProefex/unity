@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +32,7 @@ func GenerateQrToken(userId uint, cantidad int, puntos int, producto int) (strin
 			"cantidad": cantidad,
 			"puntos":   puntos,
 			"producto": producto,
-			"exp":      time.Now().Local().Add(time.Minute * 60).Unix(),
+			"exp":      time.Now().Local().Add(time.Minute * 5).Unix(),
 		})
 	tokenString, err := token.SignedString([]byte(SecretQR))
 	if err != nil {
