@@ -25,3 +25,7 @@ type CategoriaMiniChallenge struct {
 	Nombre  string `json:"nombre" binding:"required"`
 	Usuario uint   `json:"usuario" binding:"required"`
 }
+
+type CategoriaRestar struct {
+	KeyServer string `json:"usuario" binding:"required"`
+}

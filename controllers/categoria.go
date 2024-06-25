@@ -134,14 +134,16 @@ func GenerateMiniChallenge(c *gin.Context) {
 }
 
 func RestartMiniChallenge(c *gin.Context) {
-	var input types.CategoriaChallenge
+	var input types.CategoriaRestar
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := service.ServiceRemoveMiniChallenge()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+	if input.KeyServer == utils.KeyServer {
+		err := service.ServiceRemoveMiniChallenge()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 	}
 }
