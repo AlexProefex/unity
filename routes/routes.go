@@ -38,6 +38,8 @@ func Routes() {
 			auth.POST("/register", controllers.Register)
 			auth.POST("/login", controllers.Login)
 		}
+		internalServer := api.Group("internal")
+		internalServer.POST("restart-challenge", controllers.RestartMiniChallenge)
 		//api.GET("/albums", controllers.ShowAlbum)
 		// Profile route with JWT authentication middleware
 		//api.GET("/profile", middleware.JwtAuthMiddleware(), controllers.Profile)
@@ -46,6 +48,7 @@ func Routes() {
 			customer.Use(middleware.JwtQRAuth())
 			customer.POST("/puntos", controllers.CanjearRecompesasPuntos)
 			customer.POST("/insignias", controllers.CanjearRecompesasInsignia)
+
 		}
 		recover := api.Group("recover")
 		{
@@ -59,7 +62,7 @@ func Routes() {
 			categoria.GET("/", controllers.GetAllCategorias)
 			categoria.POST("/challenge", controllers.GenerateChallenge)
 			categoria.POST("/mini-challenge", controllers.GenerateMiniChallenge)
-			categoria.POST("/restart-challenge", controllers.RestartMiniChallenge)
+			//categoria.POST("/restart-challenge", controllers.RestartMiniChallenge)
 
 			categoria.GET("/routes/:id", controllers.GetChallenge)
 
