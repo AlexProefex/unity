@@ -3,6 +3,7 @@ package dao
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"unity/customError"
 	"unity/initialize"
 	"unity/repository/model"
@@ -142,6 +143,76 @@ func (usuario *Usuarios) CobrarAgregarRecompensaPuntos(uid uint) (*Usuarios, err
 	return usuario, err
 }
 
+func CobrarAgregarRecompensaInsigniaWithNewCamps(uid uint, cantidad int, producto int, insignias int) (*Usuarios, error) {
+	tx := initialize.DB.Begin()
+
+	usuario := &Usuarios{}
+
+	err := initialize.DB.Model(usuario).Where("ID = ?", uid).Update("cantidad", cantidad).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			tx.Rollback()
+			return &Usuarios{}, errors.New(utils.Not_found)
+		}
+		tx.Rollback()
+		return &Usuarios{}, errors.New(utils.Ha_ocurrido_un_error)
+	}
+	canjes := &Canjes{
+		ProductId: strconv.Itoa(producto),
+		UsuarioId: strconv.Itoa(int(uid)),
+		Puntos:    "0",
+		Insignias: strconv.Itoa(insignias),
+	}
+
+	err = initialize.DB.Create(canjes).Error
+	if err != nil {
+		_, err = customError.ValidateUnique(err)
+		if err != nil {
+			return &Usuarios{}, err
+		}
+	}
+
+	tx.Commit()
+
+	return usuario, err
+
+}
+
+func CobrarAgregarRecompensaPuntosWithNewCamps(uid uint, puntos int, producto int, points int) (*Usuarios, error) {
+	tx := initialize.DB.Begin()
+
+	usuario := &Usuarios{}
+
+	err := initialize.DB.Model(usuario).Where("ID = ?", uid).Update("puntos", puntos).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			tx.Rollback()
+			return &Usuarios{}, errors.New(utils.Not_found)
+		}
+		tx.Rollback()
+		return &Usuarios{}, errors.New(utils.Ha_ocurrido_un_error)
+	}
+	canjes := &Canjes{
+		ProductId: strconv.Itoa(producto),
+		UsuarioId: strconv.Itoa(int(uid)),
+		Puntos:    strconv.Itoa(points),
+		Insignias: "0",
+	}
+
+	err = initialize.DB.Create(canjes).Error
+	if err != nil {
+		_, err = customError.ValidateUnique(err)
+		if err != nil {
+			return &Usuarios{}, err
+		}
+	}
+
+	tx.Commit()
+
+	return usuario, err
+
+}
+
 func (usuario *Usuarios) CambiarPassword(uid uint) (*Usuarios, error) {
 	usuarios, err := HashPassowrd(usuario)
 	if err != nil {
@@ -159,6 +230,7 @@ func (usuario *Usuarios) CambiarPassword(uid uint) (*Usuarios, error) {
 
 func (user Usuarios) ConsultarEmail(correo_electronico string) (Usuarios, error) {
 	if err := initialize.DB.Where("Correo_electronico = ?", correo_electronico).First(&user).Error; err != nil {
+
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return Usuarios{}, errors.New(utils.Not_found)
 		}

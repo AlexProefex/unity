@@ -13,6 +13,7 @@ func Migrate(DB *gorm.DB) {
 	DB.AutoMigrate(&model.UsuarioLocacion{})
 	DB.AutoMigrate(&model.Recompensa{})
 	DB.AutoMigrate(&model.Premio{})
+	DB.AutoMigrate(&model.Canjes{})
 
 	//fmt.Println(err)
 }

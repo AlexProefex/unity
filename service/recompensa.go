@@ -77,7 +77,8 @@ func ServiceCobrarAgregarRecompensaInsignia(uid uint, cantidad int, producto uin
 	if recompensa.ID != uid {
 		return response, errors.New("no se pudo actualizar el recurso solicitado")
 	}
-	_, err = recompensa.CobrarAgregarRecompensaInsignia(uid)
+	//_, err = recompensa.CobrarAgregarRecompensaInsignia(uid)
+	_, err = dao.CobrarAgregarRecompensaInsigniaWithNewCamps(uid, recompensa.Cantidad, int(producto), cantidad)
 	if err != nil {
 		return response, err
 	}
@@ -118,7 +119,8 @@ func ServiceCobrarAgregarRecompensaPuntos(uid uint, puntos int, producto uint) (
 		return response, errors.New("no se pudo actualizar el recurso solicitado")
 	}
 
-	_, err = recompensa.CobrarAgregarRecompensaPuntos(uid)
+	//_, err = recompensa.CobrarAgregarRecompensaPuntos(uid)
+	_, err = dao.CobrarAgregarRecompensaPuntosWithNewCamps(uid, recompensa.Puntos, int(producto), puntos)
 	if err != nil {
 		return response, err
 	}
