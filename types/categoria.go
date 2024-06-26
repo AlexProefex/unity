@@ -27,5 +27,5 @@ type CategoriaMiniChallenge struct {
 }
 
 type CategoriaRestar struct {
-	KeyServer string `json:"usuario" binding:"required"`
+	KeyServer string `json:"keyserver" binding:"required"`
 }
