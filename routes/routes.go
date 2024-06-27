@@ -11,7 +11,9 @@ import (
 )
 
 func Routes() {
-	router := gin.Default()
+	router := gin.New()
+	//router := gin.Default()
+	router.Use(middleware.CORSMiddleware())
 	initialize.ConnectionDB()
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	/*if err := http.ListenAndServe(":8080", nil); err != nil {
